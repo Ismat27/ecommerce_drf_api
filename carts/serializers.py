@@ -1,6 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from products.serializers import ProductSerializer
 from .models import Cart, CartItem
+from products.models import Product
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer(source='item', read_only=True)
@@ -39,3 +41,16 @@ class CartUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'is_ordered'
         ]
+
+class AddToCartSerializer(serializers.Serializer):
+    product = ProductSerializer(source='item', read_only=True)
+    quantity = serializers.IntegerField(default=1)
+    product_id = serializers.IntegerField(write_only=True)
+
+    def create(self, validated_data):
+        item = get_object_or_404(Product, pk=validated_data['product_id'])
+        new_item = CartItem.objects.create(
+            quantity = validated_data['quantity'],
+            item = item
+        )
+        return new_item
