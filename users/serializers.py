@@ -27,7 +27,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'password1'
         ]
 
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'email': {'write_only': True},
+        }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password1']:
