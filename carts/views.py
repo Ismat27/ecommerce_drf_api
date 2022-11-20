@@ -7,6 +7,19 @@ class CartRetrieveUpdate(generics.RetrieveUpdateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
+    def get_object(self):
+        user = self.request.user
+        cart = Cart.objects.filter(
+            is_ordered=False, user=user
+        ).order_by('-last_updated').first()
+        return cart
+
+    def get_queryset(self):
+        user = self.request.user
+        carts = Cart.objects.filter(
+            is_ordered=False, user=user
+        ).order_by('-last_updated')
+        return carts
     # def perform_update()
 
     def get_serializer_class(self):
@@ -21,9 +34,9 @@ class AddToCartApiView(generics.CreateAPIView):
     def perform_create(self, serializer):
         request = self.request
         user = request.user
-        cart = Cart.objects.filter(
+        cart = Cart.objects.get(
             is_ordered=False, user=user
-        ).order_by('-last_updated').first()
+        )
         if cart is None:
             cart = Cart.objects.create(
                 user=user

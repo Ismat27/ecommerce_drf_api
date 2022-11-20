@@ -75,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.is_staff
 
     def __str__(self) -> str:
-        return self.email
+        return self.get_full_name()
     
     def get_full_name(self):
         if self.first_name and self.last_name:

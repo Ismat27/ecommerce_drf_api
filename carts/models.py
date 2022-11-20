@@ -26,6 +26,9 @@ class Cart(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return f'user: {self.user}'
+
     @property
     def cart_items(self):
         items = self.cartitem_set.all()
