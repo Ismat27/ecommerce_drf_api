@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .serializers import ProductSerializer, ProductCreateSerializer
 from .models import Product
@@ -7,6 +8,7 @@ from .models import Product
 class ProductListCreate(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

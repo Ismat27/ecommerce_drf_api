@@ -12,6 +12,7 @@ class ProductSerializer(serializers.Serializer):
     desc = serializers.CharField()
     price = serializers.DecimalField(max_digits=15, decimal_places=2)
     discount = serializers.SerializerMethodField(read_only=True)
+    image = serializers.ImageField()
 
     def get_discount(self, obj):
         return "%.2f" %(float(obj.price) * 0.2)
