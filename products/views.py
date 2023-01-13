@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from .serializers import ProductSerializer, ProductCreateSerializer
@@ -19,3 +19,13 @@ class ProductListCreate(generics.ListCreateAPIView):
     #     print(serializer.validated_data['price'])
     #     serializer.save()
         # return super().perform_create(serializer)
+
+class ProductRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'pk'
+
+    def get_permissions(self):
+        if self.request.method != 'GET':
+            return  [permissions.IsAdminUser()]
+        return super().get_permissions()
