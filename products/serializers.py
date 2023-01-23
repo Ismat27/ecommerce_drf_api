@@ -11,12 +11,27 @@ class ProductSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     desc = serializers.CharField()
     price = serializers.DecimalField(max_digits=15, decimal_places=2)
+    discounted_price = serializers.DecimalField(max_digits=15, decimal_places=2)
     discount = serializers.SerializerMethodField(read_only=True)
     id = serializers.SerializerMethodField(read_only=True)
     image = serializers.ImageField()
+    category = serializers.SerializerMethodField()
+    brand = serializers.SerializerMethodField()
 
     def get_discount(self, obj):
-        return "%.2f" %(float(obj.price) * 0.2)
+        try:
+            price = obj.price
+            discounted_price = obj.discounted_price
+            diff = price - discounted_price
+            return f"{round(diff / price * 100)}%"
+        except Exception:
+            return "0%"
 
     def get_id(self, obj):
         return obj.id
+    
+    def get_category(self, obj):
+        return obj.category.name
+
+    def get_brand(self, obj):
+        return obj.brand.name
