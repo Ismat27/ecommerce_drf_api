@@ -29,3 +29,11 @@ class ProductRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method != 'GET':
             return  [permissions.IsAdminUser()]
         return super().get_permissions()
+
+class CategoryProduct(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        category_name = self.kwargs['category_name']
+        products = Product.objects.filter(category__name=category_name)
+        return products
