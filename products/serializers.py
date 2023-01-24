@@ -31,7 +31,11 @@ class ProductSerializer(serializers.Serializer):
         return obj.id
     
     def get_category(self, obj):
-        return obj.category.name
+        if obj.category:
+            return obj.category.name
+        return ""
 
     def get_brand(self, obj):
-        return obj.brand.name
+        if obj.brand:
+            return obj.brand.name
+        return ""
