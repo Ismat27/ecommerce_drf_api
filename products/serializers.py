@@ -13,6 +13,11 @@ class ProductSerializer(serializers.Serializer):
     price = serializers.DecimalField(max_digits=15, decimal_places=2)
     discounted_price = serializers.DecimalField(max_digits=15, decimal_places=2)
     discount = serializers.SerializerMethodField(read_only=True)
+    in_stock = serializers.BooleanField()
+    is_flash_sale = serializers.BooleanField()
+    is_recommended = serializers.BooleanField()
+    timestamp = serializers.SerializerMethodField(read_only=True)
+    stock_quantity = serializers.IntegerField()
     id = serializers.SerializerMethodField(read_only=True)
     image = serializers.ImageField()
     category = serializers.SerializerMethodField()
@@ -23,9 +28,9 @@ class ProductSerializer(serializers.Serializer):
             price = obj.price
             discounted_price = obj.discounted_price
             diff = price - discounted_price
-            return f"{round(diff / price * 100)}%"
+            return round(diff / price * 100)
         except Exception:
-            return "0%"
+            return 0
 
     def get_id(self, obj):
         return obj.id
@@ -39,3 +44,6 @@ class ProductSerializer(serializers.Serializer):
         if obj.brand:
             return obj.brand.name
         return ""
+
+    def get_timestamp(self, obj):
+        return obj.updated_at.timestamp() * 1000
