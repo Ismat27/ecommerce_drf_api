@@ -26,6 +26,9 @@ class Product(models.Model):
     is_flash_sale = models.BooleanField(default=False, null=False, blank=False)
     stock_quantity = models.IntegerField(default=1, null=False, blank=False)
     image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_recommended = models.BooleanField(default=False, null=False, blank=False)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
 
