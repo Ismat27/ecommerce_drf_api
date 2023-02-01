@@ -1,4 +1,7 @@
 from django.db import models
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
 
 def upload_to(instance, filename):
     return 'images/{filename}'.format(filename=filename)
@@ -34,3 +37,9 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+class UserReview(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    rating = models.IntegerField(default=0)
+    review = models.TextField(blank=True, null=True)
